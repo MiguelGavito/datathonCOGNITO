@@ -8,17 +8,14 @@ def cargar_y_filtrar_tiendas(ruta_csv, ruta_shp_nl, ruta_shp_tam):
     nuevo_leon = gpd.read_file(ruta_shp_nl)
     tamaulipas = gpd.read_file(ruta_shp_tam)
 
+    gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df['LONGITUD_NUM'], df['LATITUD_NUM']), crs="EPSG:4326")
+
     geom_nl = nuevo_leon.geometry.unary_union
     geom_tam = tamaulipas.geometry.unary_union
 
-    filas_validas = []
-    for _, row in df.iterrows():
-        lat, lon = row["LATITUD_NUM"], row["LONGITUD_NUM"]
-        punto = Point(lon, lat)
-        if geom_nl.contains(punto) or geom_tam.contains(punto):
-            filas_validas.append(row)
+    gdf_filtrado = gdf[gdf.geometry.within(geom_nl) | gdf.geometry.within(geom_tam)]
+    return gdf_filtrado.drop(columns='geometry')
 
-    return pd.DataFrame(filas_validas)
 
 
 def limpiar_columnas_categoricas(df):
