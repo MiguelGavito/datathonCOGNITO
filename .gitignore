@@ -1,5 +1,7 @@
 /env
 /__pycache__
 /__pycache__
-/DIM_TIENDA_TEST.csv
-/DIM_TIENDA.csv
+DIM_TIENDA_TEST.csv
+Venta.csv
+DIM_TIENDA.csv
+Meta_Venta.csv
